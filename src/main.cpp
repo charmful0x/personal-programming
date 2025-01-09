@@ -4,5 +4,5 @@
 #include "utils.h"
 
 int main() {
-    exercise();
+    avg_age_of_grp_members();
 }

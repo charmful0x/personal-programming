@@ -1,6 +1,7 @@
 #include<iostream>
 #include<iomanip>
 #include<string>
+#include<sstream>
 #include<vector>
 #include<array>
 #include<algorithm>
@@ -10,8 +11,150 @@
 #include<ctime>
 #include<cstdlib>
 #include<regex>
+#include<fstream>
 #include "utils.h"
 
+int scan_vowels_from_file() {
+    std::fstream f_content, f_vowels, f_consonants;
+
+    f_content.open("./f_content.txt", std::ios::in);
+    f_vowels.open("./f_vowels.txt", std::ios::out | std::ios::app);
+    f_consonants.open("./f_consonants.txt", std::ios::out | std::ios::app);
+    std::vector<std::string> vowels, consonants;
+    std::string word;
+    std::string vowels_const = "aeoiu";
+
+    if (!f_content.is_open()) {
+        std::cerr << "Error 'content.txt' isn't found" << std::endl;
+        return 1;
+    }
+
+    while (f_content >> word) {
+        for (char c: word) {
+            
+            std::string c_str(1, std::tolower(c)); // convert to lower case then char to string
+            std::cout << c_str << std::endl;
+            std::size_t is_vowel = vowels_const.find(c_str);
+            if (is_vowel != std::string::npos) {
+                vowels.push_back(c_str);
+                f_vowels << c_str;
+            } else {
+                consonants.push_back(c_str);
+                std::cout << c_str << std::endl;
+                f_consonants << c_str;
+            }
+        }
+    }
+
+    std::cout << "vowels count: " << vowels.size() << std::endl;
+    std::cout << "consonants count: " << consonants.size() << std::endl;
+
+    f_content.close();
+    f_vowels.close();
+    f_consonants.close();
+
+    return 0;
+}
+
+int calculate_work_expenses() {
+    std::fstream f_work;
+
+    f_work.open("./f_work.txt", std::ios::in);
+    double data[10] = {0.0};
+
+    if (!f_work.is_open()) {
+        std::cerr << "Error file 'f_work.txt' dont exist" << std::endl;
+        return 1;
+    }
+
+    double km_start = 0.0, km_end = 0.0, cost = 0.0, total_cost = 0.0, total_km_work = 0.0;
+    int street_nr = 0;
+
+    for (int i = 0; i < 10; i++) {
+        f_work >> street_nr >> km_start >> km_end >> cost;
+        total_cost += cost;
+        double affected_km = km_end - km_start;
+        data[i] = affected_km;
+        total_km_work += affected_km;
+    }
+
+    std::cout << "avg cost per km = $" << total_cost / total_km_work << std::endl;
+    return 0;
+}
+
+void count_letters_in_file() {
+    std::fstream f_input, f_output;
+
+    f_input.open("./f_input.txt", std::ios::in);
+    f_output.open("./f_output.txt", std::ios::out | std::ios::app);
+
+    int alphabets_count['z' - 'a' + 1] = {0};
+
+    if (!f_input.is_open()) {
+        std::cerr << "Error: file 'f_input.txt' not found" << std::endl;
+    };
+
+    char c;
+
+    while(f_input >> c) {
+        if (isalpha(c)) {
+            // c - 97 will order the letter in alphabetic order
+            // from 0 to 26. e.g. 'a' - 97 = 0 and 'a' = 'a' = 0;
+            std::cout << c << ":" << std::tolower(c) << ":" << std::tolower(c) - 97 << std::endl;
+            alphabets_count[std::tolower(c) - 'a'] += 1;
+        }
+    }
+
+    for (int i = 0; i < 26; i++) {
+        std::string letter = "";
+        char letter_char = i + 'a'; // convert it back to char letter
+        letter += letter_char;
+        std::cout << letter << std::endl;
+        f_output << letter << " " << alphabets_count[i] << '\n';
+    }
+
+    f_input.close();
+    f_output.close();
+
+}
+
+void avg_age_of_grp_members() {
+    std::fstream file;
+
+    file.open("./f_teams.txt", std::ios::in);
+
+    if (!file.is_open()) {
+        std::cerr << "Error file 'f_teams.txt' is not found" << std::endl;
+    };
+
+    std::string line;
+    std::vector<int> team;
+    int num_holder = 0, total_age = 0;
+
+    while(std::getline(file, line)) {
+        std::istringstream ssr(line);
+        std::string team_name;
+        ssr >> team_name;
+        assert(team_name.length() <= 20);
+        
+
+        while(ssr >> num_holder) {
+            team.push_back(num_holder);
+        }
+
+        for (int i = 1; i < team.size(); i++) {
+            total_age += team[i];
+        }
+
+        std::cout << team_name << " - members count: " << team.size() - 1
+        << " - average age: " << total_age / (team.size() - 1) << std::endl;
+        // reset value
+        total_age = 0;
+        team.clear();
+    }
+
+    file.close();
+}
 
 void print_date(int d, int m, int y) {
     std::cout << std::setw(2) << std::setfill('0') << d << "/" 
@@ -412,3 +555,4 @@ void exercise() {
     std::cout << "Sum of elements in X: " << x_sum << " ; and in Y: " << y_sum << std::endl;
 
 }
+
