@@ -16,4 +16,5 @@ int strToIp(char ip_char[], int ip[4]);
 void m3xm3(int A[3][3], int B[3][3]);
 double main_matrix_diagonal(double (&M) [2][2]);
 double diff_between_matrix_triangles(int M[5][5]);
+void exercise();
 

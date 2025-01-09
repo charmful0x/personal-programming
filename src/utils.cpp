@@ -353,3 +353,62 @@ double diff_between_matrix_triangles(int M[n][n]) {
     double diff = std::abs(up_tr_avg - lw_tr_avg);
     return diff;
 }
+
+double generate_random_init_matrix(int Q[n][n]) {
+    int shuffle_count = 1000;
+    double diff_count = 0;
+    // seed
+    srand(time(NULL));
+
+    for (int i = 0; i < shuffle_count; i++) {
+        for (int j = 0; j < n; j++) {
+            for (int k = 0; k < n; k++) {
+                int rand_val = rand() % 10; // 0-9
+                Q[j][k] = rand_val;
+            }
+        }
+
+        diff_count += diff_between_matrix_triangles(Q);
+    }
+
+    return diff_count / shuffle_count;
+}
+
+void exercise() {
+    double M[4][3] = {0};
+    double X[2][3] = {0};
+    double Y[2][3] = {0};
+
+    double x_sum = 0.0, y_sum = 0.0;;
+    int x_row = 0, y_row = 0;
+
+    for (int i = 0; i < 4 ; i++) {
+        for (int j = 0; j < 3; j++) {
+            std::cout << "inserting value for M[" << i << 
+            "]" << "[" << j << "] -- choose a number: " << std::endl;
+
+            std::cin >> M[i][j];
+        }
+    }
+
+    for (int i = 0; i < 4; i++) {
+        for (int j = 0; j < 3; j++) {
+            if (i % 2 == 0) {
+                X[x_row][j] = M[i][j];
+                x_sum += M[i][j];
+            } else {
+                Y[y_row][j] = M[i][j];
+                y_sum += M[i][j];
+            }
+        }
+
+            if (i % 2 == 0) {
+                x_row++;
+            } else {
+                y_row++;
+            }
+    }
+
+    std::cout << "Sum of elements in X: " << x_sum << " ; and in Y: " << y_sum << std::endl;
+
+}
