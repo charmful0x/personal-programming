@@ -200,12 +200,14 @@ int calculate_temp_of() {
                 min_temp = temp_holder;
             }
         }
+        processed_files++;
 
         std::cout << "doing analysis for " << file_name << ": \n" <<
         "* min temp: " << min_temp << " ---- " << "max temp: " << max_temp
         << std::endl;
 
         min_temp = 0; max_temp = 0; program_start = 1;
+        file.close();
     }
 }
 
