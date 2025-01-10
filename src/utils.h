@@ -21,4 +21,5 @@ int scan_vowels_from_file();
 int calculate_work_expenses();
 void count_letters_in_file();
 void avg_age_of_grp_members();
+int calculate_temp_of();
 

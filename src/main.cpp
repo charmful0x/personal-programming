@@ -4,5 +4,5 @@
 #include "utils.h"
 
 int main() {
-    avg_age_of_grp_members();
+    calculate_temp_of();
 }

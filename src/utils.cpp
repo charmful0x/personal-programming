@@ -156,6 +156,59 @@ void avg_age_of_grp_members() {
     file.close();
 }
 
+int calculate_temp_of() {
+    std::string file_name;
+    int processed_files = 0, program_start = 1;
+    double temp_holder = 0.0, max_temp = 0.0, min_temp = 0.0;
+
+    while (true) {
+        std::cout << "insert file name: " << std::endl;
+        std::cin >> file_name;
+
+        if (file_name == "exit") {
+            std::cout << "you decided to exit the program, total proccesed files: " << processed_files
+            << std::endl;
+            return -1;
+        }
+
+        std::fstream file;
+        file.open(file_name, std::ios::in);
+
+        while(!file.is_open()) {
+            std::cout << "file '" << file_name << "' does not exist, enter another file: " << std::endl;
+            std::cin >> file_name;  
+
+            if (file_name == "exit") {
+                std::cout << "you decided to exit the program, total proccesed files: " << processed_files
+                << std::endl;
+                return -1;
+            }
+        }
+
+        while (file >> temp_holder) {
+            if (program_start) {
+             min_temp = temp_holder;
+             max_temp = temp_holder;
+             program_start = 0;
+            }
+
+            if (temp_holder > max_temp) {
+                max_temp = temp_holder;
+            }
+
+            if (temp_holder < min_temp) {
+                min_temp = temp_holder;
+            }
+        }
+
+        std::cout << "doing analysis for " << file_name << ": \n" <<
+        "* min temp: " << min_temp << " ---- " << "max temp: " << max_temp
+        << std::endl;
+
+        min_temp = 0; max_temp = 0; program_start = 1;
+    }
+}
+
 void print_date(int d, int m, int y) {
     std::cout << std::setw(2) << std::setfill('0') << d << "/" 
     << std::setw(2) << std::setfill('0') << m << "/"
